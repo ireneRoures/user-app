@@ -6,8 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { generateUrl, USER_DETAIL_URL } from '../routing/Routes'
-import { Container, Row, Col, Card } from 'react-bootstrap'
-import { LoaddingComponent } from './LoaddingComponent'
+import { Container, Row, Col, Card, Alert } from 'react-bootstrap'
+import { LoadingComponent } from './LoadingComponent'
+import { useTranslation } from 'react-i18next'
+import { parseError } from '../services/ErrorService'
 
 
 const actions = {
@@ -16,14 +18,15 @@ const actions = {
 
 export const UserListComponent: React.FC = () => {
 
+    const { t } = useTranslation();
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
     
     React.useEffect(() => {
         actions.getUsers()
             .then(resp  => setUsers(resp.data))
-            .catch(resp => setError(true))
+            .catch(resp => { setErrorMsg(parseError(resp.response.status)) })
             .finally(() => setIsLoading(false))
     }, [])
 
@@ -48,7 +51,10 @@ export const UserListComponent: React.FC = () => {
                 <Col md={10}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Listaod de usuarios</Card.Title>
+                            <Card.Title>{t('TR_USER_LIST')}</Card.Title>
+                            {errorMsg.length > 0 &&
+                                <Alert variant='danger'>{t(errorMsg)}</Alert>
+                            }
                             <Card.Text>
                             {isLoading ?
                                 <LoadingComponent/>
@@ -56,9 +62,9 @@ export const UserListComponent: React.FC = () => {
                                 <Table responsive="sm">
                                     <thead>
                                         <tr>
-                                            <th>ID</th> 
-                                            <th>Nombre</th>
-                                            <th>Email</th>
+                                            <th>{t('TR_ID')}</th> 
+                                            <th>{t('TR_NAME')}</th>
+                                            <th>{t('TR_EMAIL')}</th>
                                             <th></th>
                                         </tr>
                                     </thead>
