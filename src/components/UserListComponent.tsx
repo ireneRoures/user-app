@@ -51,7 +51,7 @@ export const UserListComponent: React.FC = () => {
                             <Card.Title>Listaod de usuarios</Card.Title>
                             <Card.Text>
                             {isLoading ?
-                                <h6>cargando....</h6>
+                                <LoadingComponent/>
                             :
                                 <Table responsive="sm">
                                     <thead>
