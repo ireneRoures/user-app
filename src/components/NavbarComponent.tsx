@@ -11,7 +11,7 @@ export const NavbarComponent = () => {
     
     return (
         <Navbar collapseOnSelect expand='lg' bg='light' variant='light'>
-        <Navbar.Brand href='#home'><img src={process.env.REACT_APP_REACT_URL + '/logo.png'} height='35'/></Navbar.Brand>
+        <Navbar.Brand href={process.env.REACT_APP_BRAND_URL} target="_blank"><img src='/logo.png' height='35'/></Navbar.Brand>
         <Navbar.Toggle aria-controls='responsive-navbar-nav' />
         <Navbar.Collapse id='responsive-navbar-nav'>
             <Nav className='mr-auto'>

@@ -47,7 +47,7 @@ export const UserListComponent: React.FC = () => {
     
     return (
         <Container>
-            <Row className="justify-content-sm-center">
+            <Row className='justify-content-sm-center'>
                 <Col md={10}>
                     <Card>
                         <Card.Body>
@@ -55,7 +55,6 @@ export const UserListComponent: React.FC = () => {
                             {errorMsg.length > 0 &&
                                 <Alert variant='danger'>{t(errorMsg)}</Alert>
                             }
-                            <Card.Text>
                             {isLoading ?
                                 <LoadingComponent/>
                             :
@@ -71,7 +70,6 @@ export const UserListComponent: React.FC = () => {
                                     {renderUsers()}
                                 </Table>
                             }
-                            </Card.Text>
                         </Card.Body>
                     </Card>
                 </Col>
