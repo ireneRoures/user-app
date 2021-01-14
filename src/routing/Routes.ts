@@ -1,4 +1,4 @@
-export const BASE_URL: string = 'https://my-user-manager.herokuapp.com'
+export const BASE_URL = process.env.REACT_APP_API_URL
 
 // BACK
 export const USERS_URL: string = `${BASE_URL}/users`
