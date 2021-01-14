@@ -1,7 +1,7 @@
 version: '3'
 services:
     frontend: 
-        image: ireneroures/cloudappi-test:1.0.0
+        image: ireneroures/cloudappi-test:1.1.0
         ports: 
             - '80:80'
         restart: always
