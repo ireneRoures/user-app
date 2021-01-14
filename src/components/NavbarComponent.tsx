@@ -1,7 +1,7 @@
 
 import Navbar from 'react-bootstrap/Navbar'
 import React from 'react'
-import { Nav, NavDropdown } from 'react-bootstrap'
+import { Nav } from 'react-bootstrap'
 import { HOME_URL } from '../routing/Routes'
 import { useTranslation } from 'react-i18next'
 
