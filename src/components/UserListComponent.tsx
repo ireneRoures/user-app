@@ -9,8 +9,6 @@ import { generateUrl, USER_DETAIL_URL } from '../routing/Routes'
 import { Container, Row, Col, Card, Alert } from 'react-bootstrap'
 import { LoadingComponent } from './LoadingComponent'
 import { useTranslation } from 'react-i18next'
-import { parseError } from '../services/ErrorService'
-
 
 const actions = {
     getUsers
@@ -25,10 +23,29 @@ export const UserListComponent: React.FC = () => {
     
     React.useEffect(() => {
         actions.getUsers()
-            .then(resp  => setUsers(resp.data))
-            .catch(resp => { setErrorMsg(parseError(resp.response.status)) })
+            .then(usersList  => setUsers(usersList))
+            .catch(error => setErrorMsg(error))
             .finally(() => setIsLoading(false))
     }, [])
+
+    function renderUsersTable() {
+        return (
+            isLoading ?
+                <LoadingComponent/>
+            :
+                <Table responsive="sm">
+                    <thead>
+                        <tr>
+                            <th>{t('TR_ID')}</th> 
+                            <th>{t('TR_NAME')}</th>
+                            <th>{t('TR_EMAIL')}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {renderUsers()}
+                </Table>
+        )
+    }
 
     function renderUsers() {
         return users.map((user: User) => { 
@@ -52,23 +69,10 @@ export const UserListComponent: React.FC = () => {
                     <Card>
                         <Card.Body>
                             <Card.Title>{t('TR_USER_LIST')}</Card.Title>
-                            {errorMsg.length > 0 &&
+                            {errorMsg.length > 0 ?
                                 <Alert variant='danger'>{t(errorMsg)}</Alert>
-                            }
-                            {isLoading ?
-                                <LoadingComponent/>
-                            :
-                                <Table responsive="sm">
-                                    <thead>
-                                        <tr>
-                                            <th>{t('TR_ID')}</th> 
-                                            <th>{t('TR_NAME')}</th>
-                                            <th>{t('TR_EMAIL')}</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    {renderUsers()}
-                                </Table>
+                            : 
+                                renderUsersTable()
                             }
                         </Card.Body>
                     </Card>

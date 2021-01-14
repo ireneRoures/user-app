@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { User } from '../models/User'
 import { getUser } from '../services/UserService'
-import { useHistory, useParams } from 'react-router-dom'
-import { parseError } from '../services/ErrorService'
+import { useParams } from 'react-router-dom'
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap'
 import { LoadingComponent } from './LoadingComponent'
 import { useTranslation } from 'react-i18next'
@@ -23,16 +22,28 @@ export const UserDetailsComponent: React.FC = () => {
     const [user, setUser] = useState<User>();
     const [isLoading, setIsLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');
-    let history = useHistory();
     let { id } = useParams<UserDetailsRouteParams>();
     
     React.useEffect(() => {
         actions.getUser(id)
-            .then(resp  => setUser(resp.data))
-            .catch(error => setErrorMsg(parseError(error.response.status)))
-            .finally(() => setIsLoading(false))
+            .then(user   => setUser(user))
+            .catch(error => setErrorMsg(error.message))
+            .finally(()  => setIsLoading(false))
     }, [])
 
+    function renderUserDetails() {
+        return (
+            isLoading ?
+                <LoadingComponent/>
+            :
+                <div>
+                    <h6><FontAwesomeIcon icon={faKey} color='#A9A9A9'/> {t('TR_ID')}: {!!user ? user.id : '-'}</h6>
+                    <h6><FontAwesomeIcon icon={faUser} color='#A9A9A9'/> {t('TR_NAME')}: {!!user ? user.name : '-'}</h6>
+                    <h6><FontAwesomeIcon icon={faEnvelope} color='#A9A9A9'/> {t('TR_EMAIL')}: {!!user ? user.email : '-'}</h6>
+                </div>
+        )
+    }
+    
     return (
         <Container>
             <Row className='justify-content-sm-center'>
@@ -40,17 +51,10 @@ export const UserDetailsComponent: React.FC = () => {
                     <Card>
                         <Card.Body>
                             <Card.Title>{t('TR_USER_DETAILS')}</Card.Title>
-                            {errorMsg.length > 0 &&
+                            {errorMsg.length > 0 ?
                                 <Alert variant='danger'>{t(errorMsg)}</Alert>
-                            }
-                            {isLoading ?
-                                <LoadingComponent/>
-                            :
-                                <div>
-                                    <h6><FontAwesomeIcon icon={faKey} color='#A9A9A9'/> {t('TR_ID')}: {!!user ? user.id : '-'}</h6>
-                                    <h6><FontAwesomeIcon icon={faUser} color='#A9A9A9'/> {t('TR_NAME')}: {!!user ? user.name : '-'}</h6>
-                                    <h6><FontAwesomeIcon icon={faEnvelope} color='#A9A9A9'/> {t('TR_EMAIL')}: {!!user ? user.email : '-'}</h6>
-                                </div>
+                            : 
+                                renderUserDetails()
                             }
                         </Card.Body>
                     </Card>
